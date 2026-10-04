@@ -1,240 +1,100 @@
-<div align="center">
-  <img src="docs/Media/paradox-header.png" alt="Paradox AntiCheat Logo" width="600">
+Paradox AntiCheat — CSZE Edition (Local / Realms)
 
-  <h1>Paradox AntiCheat</h1>
-  <p><strong>High-performance security for Minecraft Bedrock (Realms &amp; BDS)</strong></p>
+A modified build of Paradox AntiCheat v6.10.1 that adds StompZone Emojis (CSZE) stickers and emoji to Paradox's chat system.
 
-  <p>
-    <a href="https://minecraft.net">
-      <img src="https://img.shields.io/badge/Minecraft%20Bedrock-v1.26.50-brightgreen?style=for-the-badge&amp;logo=minecraft" alt="Compatibility">
-    </a>
-    <a href="https://discord.gg/qVd53N2xhq">
-      <img src="https://img.shields.io/badge/Discord-Join%20Community-5865F2?style=for-the-badge&amp;logo=discord&amp;logoColor=white" alt="Discord">
-    </a>
-    <a href="https://visual1mpact.github.io/Paradox_AntiCheat/#/">
-      <img src="https://img.shields.io/badge/Documentation-Read%20Now-007ACC?style=for-the-badge&amp;logo=gitbook&amp;logoColor=white" alt="Docs">
-    </a>
-  </p>
-</div>
+Pack version: 6.10.4 Minecraft Bedrock: 1.26.50 / 1.26.51 / 1.26.52 Modified: October 4, 2026
 
-<hr>
+❓ Why this exists
 
-<div align="center">
+Paradox takes over chat. It cancels every chat message and re-sends it itself as [Rank] Name: message. This happens even with ranks disabled, and regardless of whether another pack already handled the message. That breaks CSZE: its stickers and emoji get overwritten by Paradox's raw relay of what you typed.
 
-### 📦 API Compatibility Matrix
+This build moves CSZE's emoji and sticker handling inside Paradox, so the two stop fighting over chat.
 
-| API Module | Required Version | Description / Purpose |
-| :---: | :---: | :--- |
-| `@minecraft/server` | `2.11.0-Beta` | Core Script Engine API for world events, entity handling, block management, and main logic loops. |
-| `@minecraft/server-net` | `1.0.0-Beta` | Handles external HTTP network communication for remote logging, telemetry, and external server synchronization. |
-| `@minecraft/server-admin` | `1.0.0-Beta` | Manages elevated server administrative functions, secret configuration properties, and execution variables. |
-| `@minecraft/server-ui` | `2.3.0-Beta` | Renders custom in-game UI menus, dynamic modal dialogs, and action forms directly to players. |
+📦 API Compatibility
+API Module	Version	Notes
+@minecraft/server	2.11.0-beta	Core scripting API
+@minecraft/server-ui	2.3.0-beta	Paradox menus and forms
+@minecraft/server-net	—	Removed. BDS-only; local worlds can't load it
+@minecraft/server-admin	—	Removed. BDS-only; local worlds can't load it
+@minecraft/debug-utilities	—	Removed. Optional; Paradox runs without it
 
-</div>
+Paradox's startup code already treats the removed modules as optional. Without them, you lose only BDS-specific features like remote logging and server secrets. This dependency list matches the official Paradox Realms build.
 
-<hr>
+Running a Bedrock Dedicated Server? Use the official BDS build instead. This one is meant for single-player worlds and Realms.
 
+🚀 Installation
+Remove any older Paradox copies from Settings → Storage and from the world's own pack folders. Minecraft caches packs by UUID and version, so a stale copy can silently take precedence.
+Import this pack and add it to your world's Behavior Packs.
+Move Paradox to the top of the active behavior pack list.
+Turn on Beta APIs in World Settings → Experiments.
+Turn on the CSZE resource pack. It supplies the glyphs; without it, stickers and emoji appear as boxes.
+Turn off the CSZE behavior pack. Its job is now handled here, and leaving it on doubles your messages.
+In the world's Behavior Packs list, confirm the active version reads 6.10.4.
+✅ Checking that it works
 
-<h2>📖 About Paradox AntiCheat</h2>
+Send any normal chat message. If it shows up as [Member] YourName: ..., Paradox is running. If it shows as plain <YourName> ..., Paradox isn't loading. See Troubleshooting.
 
-<p>
-  Paradox AntiCheat is a high-performance anti-cheat system engineered for <strong>Minecraft Bedrock Edition</strong>. Designed for seamless integration into both <strong>Realms</strong> and <strong>BDS (Dedicated Server)</strong> environments, it ensures a balanced and fair gameplay experience for everyone.
-</p>
+💬 Usage
+Stickers
+~s <name>
+!s <name>
+.s <name>
+~sticker <name>
 
-<blockquote>
-  <p><strong>Paradox</strong> <em>(noun)</em>: A statement or situation that contradicts itself, yet reveals a fundamental truth.</p>
-</blockquote>
+For example, ~s pepepig posts the sticker on its own, with no name or rank line.
 
-<p>
-  The name reflects our philosophy: leveraging advanced, non-obvious detection algorithms to outsmart cheaters in ways that seem counterintuitive on the surface.
-</p>
+Unknown sticker names are sent as normal chat.
+Muted players' sticker commands go to Paradox, so mutes still apply.
+Emoji
 
-<h3>Key Highlights</h3>
-<ul>
-  <li><strong>Modular Design:</strong> Tailor individual checks and enforcement rules to match your server's needs.</li>
-  <li><strong>Realms &amp; BDS Ready:</strong> Native support for both official Minecraft Realms and custom Dedicated Servers.</li>
-  <li><strong>Developer Friendly:</strong> Simple setup workflow with comprehensive documentation.</li>
-</ul>
+Put an emoji code anywhere in a message:
 
-<p>
-  For complete integration instructions and API references, check out the 
-  <a href="https://visual1mpact.github.io/Paradox_AntiCheat/#/">Official Documentation</a>.
-</p>
+gg :minecoin: nice
 
-<hr>
+Known codes turn into glyphs, and unknown codes stay as plain text. The message is still relayed by Paradox with your rank.
 
-<div align="center">
-  <h2>📊 Project Status &amp; Metrics</h2>
-  <p>
-    <a href="https://www.codefactor.io/repository/github/Visual1mpact/paradox_anticheat">
-      <img src="https://img.shields.io/codefactor/grade/github/Visual1mpact/paradox_anticheat/rewrite?style=for-the-badge&amp;logo=codefactor" alt="CodeFactor Grade">
-    </a>
-    <a href="https://github.com/Visual1mpact/Paradox_AntiCheat/releases">
-      <img src="https://img.shields.io/github/downloads/Visual1mpact/Paradox_AntiCheat/total?style=for-the-badge&amp;color=blue" alt="Total Downloads">
-    </a>
-    <a href="https://github.com/Visual1mpact/Paradox_AntiCheat/releases/latest">
-      <img src="https://img.shields.io/github/downloads/Visual1mpact/Paradox_AntiCheat/latest/total?style=for-the-badge&amp;color=teal" alt="Latest Downloads">
-    </a>
-    <a href="https://github.com/Visual1mpact/Paradox_AntiCheat/commits">
-      <img src="https://img.shields.io/github/commit-activity/m/Visual1mpact/Paradox_AntiCheat?style=for-the-badge" alt="Commit Activity">
-    </a>
-    <a href="LICENSE">
-      <img src="https://img.shields.io/github/license/Visual1mpact/Paradox_AntiCheat?style=for-the-badge&amp;color=orange" alt="License">
-    </a>
-  </p>
-</div>
+The full sticker and emoji lists are in scripts/csze-stickers.js and scripts/csze-newmoji.js.
 
-<hr>
+🔧 What was changed
 
-<h2>🚀 Quick Start Guide</h2>
+All changes are outside Paradox's obfuscated code.
 
-<h3>1. Installation</h3>
-<ol>
-  <li>
-    Download the latest release from the <a href="https://github.com/Visual1mpact/Paradox_AntiCheat/releases">Releases</a> page based on your server setup:
-    <ul>
-      <li><strong>Realms &amp; Singleplayer:</strong> Download the <code>.mcpack</code> file.</li>
-      <li><strong>Bedrock Dedicated Server (BDS):</strong> Download the <code>.zip</code> file.</li>
-    </ul>
-  </li>
-  <li>
-    Apply the anti-cheat to your server:
-    <ul>
-      <li><strong>Realms / Singleplayer:</strong> Import the <code>.mcpack</code> file directly and apply it to your world's <strong>Behavior Packs</strong>.</li>
-      <li><strong>BDS:</strong> Extract the <code>.zip</code> file directly into your server's <code>behavior_packs</code> folder and register the folder name in <code>world_behavior_packs.json</code>.</li>
-    </ul>
-  </li>
-  <li>Move the pack to the <strong>top priority position</strong> in your active list.</li>
-  <li>Enable <strong>Beta APIs</strong> in your World Settings under Experiments.</li>
-</ol>
+File	Change
+manifest.json	Removed BDS-only module dependencies; bumped version to 6.10.4
+scripts/paradox.js	Two lines in the unobfuscated header: import the bridge, and hand Paradox a wrapped @minecraft/server
+scripts/csze-bridge.js	New. Intercepts chat before Paradox: sends stickers directly and converts emoji in regular messages
+scripts/csze-newmoji.js	New. CSZE emoji table (unchanged from CSZE)
+scripts/csze-stickers.js	New. CSZE sticker table (unchanged from CSZE)
+How the bridge works
 
+wrapServer() gives Paradox a stand-in for the @minecraft/server module that is identical to the real one except for world.beforeEvents.chatSend. When Paradox subscribes to chat, its handler is wrapped:
 
-<blockquote>
-  <p>⚠️ <strong>Important:</strong> Setting the pack to the highest priority and enabling <strong>Beta APIs</strong> are strictly required for state detection and event hooks to work.</p>
-</blockquote>
+Sticker command (and the player isn't muted): the bridge cancels the message, posts the bare sticker, and stops there. Paradox never sees it.
+Anything else: Paradox gets the event with message reading as the emoji-converted text, then does its normal rank formatting, spam checks, and relay.
 
-<h3>2. Versioning Format</h3>
-<p>Paradox follows a <code>Major.Minor.Patch</code> semantic scheme:</p>
+The wrappers are Proxies over empty objects that forward to the real ones. Bedrock locks some native properties as read-only, and a Proxy directly over a locked object throws proxy: inconsistent get when it tries to substitute a value.
 
-<table>
-  <thead>
-    <tr>
-      <th align="center">Segment</th>
-      <th align="left">Meaning</th>
-      <th align="left">Example Scenario</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td align="center"><strong><code>X</code></strong>.0.0</td>
-      <td><strong>Major Version</strong></td>
-      <td>Core architecture overhauls or breaking changes</td>
-    </tr>
-    <tr>
-      <td align="center">0.<strong><code>X</code></strong>.0</td>
-      <td><strong>Major Revision</strong></td>
-      <td>Feature additions, feature updates, or check removals</td>
-    </tr>
-    <tr>
-      <td align="center">0.0.<strong><code>X</code></strong></td>
-      <td><strong>Minor Revision</strong></td>
-      <td>Urgent patches, bug fixes, and minor adjustments</td>
-    </tr>
-  </tbody>
-</table>
+🩺 Troubleshooting
+Symptom	Likely cause / fix
+Chat shows <Name> with no rank tag	Paradox isn't running. Check that Beta APIs is on, that the active version reads 6.10.4, and that your game is 1.26.50–1.26.52.
+run failed, no runtime or context available	The script engine couldn't start. Usually a game version newer than the pack's beta API, or a BDS-only module in the manifest. Look at the log lines just above this one for the real cause.
+Stickers or emoji show as boxes	The CSZE resource pack is missing or turned off.
+Every message appears twice	The CSZE behavior pack is still on. Turn it off.
+Changes don't take effect after importing	The old pack is cached. Delete all Paradox copies and re-import.
 
-<hr>
+To see errors in-game, turn on Settings → Creator → Content Log GUI, then rejoin the world.
 
-<h2>🛠️ Development Environment Setup</h2>
+⚠️ Known limitations
+Not covered by Paradox's anti-spam: stickers skip Paradox entirely, so its spam check doesn't apply to them. Mutes do still apply.
+Untested against anti-spam: how Paradox's spam check treats emoji glyphs in regular messages hasn't been verified.
+Updates overwrite the patch: a new Paradox release replaces paradox.js and manifest.json. To patch a new version:
+Copy in the three csze-*.js files.
+In paradox.js, add import { wrapServer } from "./csze-bridge.js"; below the @minecraft/server-ui import.
+Change "@minecraft/server": mcServer, to "@minecraft/server": wrapServer(mcServer),.
+Remove the BDS-only dependencies from manifest.json (or start from the official Realms build) and bump the header version.
+Game version locked: beta APIs are tied to the exact game version. When Minecraft updates past 1.26.52, this pack will likely stop loading until it is rebuilt against the new beta.
+📜 Credits & License
+Paradox AntiCheat by Visual1mpact, licensed under GPLv3 (see LICENSE). This is a modified version, distributed under the same license. Upstream: https://github.com/Visual1mpact/Paradox_AntiCheat
+StompZone Emojis (CSZE) by DJ Stomp. The emoji and sticker tables are taken unchanged from CSZE.
 
-<h3>Prerequisites &amp; Dependencies</h3>
-<ul>
-  <li><a href="https://nodejs.org/">Node.js</a> (LTS Version)</li>
-  <li><a href="https://code.visualstudio.com/">Visual Studio Code</a></li>
-  <li><a href="https://git-scm.com/">Git</a></li>
-</ul>
-
-<hr>
-
-<h3>Option A: Linux Setup</h3>
-<ol>
-  <li>
-    <p><strong>Run the Automated Setup Script:</strong></p>
-    <pre><code>chmod +x ./bin/setup-node-linux.sh
-./bin/setup-node-linux.sh</code></pre>
-    <p><em>This automatically installs NVM, fetches the latest Node.js LTS, and sets default aliases.</em></p>
-  </li>
-  <li>
-    <p><strong>Install Node Packages:</strong></p>
-    <pre><code>npm install</code></pre>
-  </li>
-</ol>
-
-<h3>Option B: Windows Setup</h3>
-<ol>
-  <li>
-    <p><strong>Run the Automated PowerShell Script:</strong></p>
-    <pre><code>./bin/setup-node-windows.ps1</code></pre>
-    <p><em>This downloads the Node.js LTS installer and updates your system environment path.</em></p>
-  </li>
-  <li>
-    <p><strong>Install Node Packages:</strong></p>
-    <pre><code>npm install</code></pre>
-  </li>
-</ol>
-
-<h3>Option C: Manual Workspace Setup</h3>
-<p>If you prefer installing tools manually:</p>
-<ol>
-  <li>
-    <p><strong>Install VS Code via installer or package manager:</strong></p>
-    <pre><code>sudo apt update &amp;&amp; sudo apt install code</code></pre>
-  </li>
-  <li>
-    <p><strong>Clone your repository:</strong></p>
-    <pre><code>git clone https://github.com/&lt;your-github-username&gt;/Paradox_AntiCheat.git
-cd Paradox_AntiCheat</code></pre>
-  </li>
-  <li>
-    <p><strong>Install dependencies &amp; launch workspace:</strong></p>
-    <pre><code>npm install
-code .</code></pre>
-  </li>
-</ol>
-
-<hr>
-
-<h2>🤝 Contributing</h2>
-<p>We welcome contributions! Follow these step-by-step instructions to get started:</p>
-<ol>
-  <li><strong>Fork the Repository:</strong> Visit the <a href="https://github.com/Visual1mpact/Paradox_AntiCheat/fork">Paradox AntiCheat Repository</a> and click <strong>Fork</strong>.</li>
-  <li>
-    <strong>Clone your fork:</strong>
-    <pre><code>git clone https://github.com/&lt;your-github-username&gt;/Paradox_AntiCheat.git
-cd Paradox_AntiCheat</code></pre>
-  </li>
-  <li>
-    <strong>Install dependencies:</strong>
-    <pre><code>npm install</code></pre>
-  </li>
-  <li>
-    <strong>Create a branch and make changes:</strong>
-    <pre><code>git checkout -b feature/my-new-check</code></pre>
-  </li>
-  <li>
-    <strong>Stage &amp; Commit your updates:</strong>
-    <pre><code>git add .
-git commit -m "feat: add new speed detection module"</code></pre>
-  </li>
-  <li>
-    <strong>Push to GitHub &amp; Open Pull Request:</strong>
-    <pre><code>git push origin feature/my-new-check</code></pre>
-    <p>Then navigate to the original repository to initiate a <strong>Pull Request</strong>.</p>
-  </li>
-</ol>
-
-<hr>
-
-<div align="center">
-  <p>Need help? Join our <a href="https://discord.gg/qVd53N2xhq">Discord Server</a> for support and discussion.</p>
-</div>
+Please report bugs in this edition to whoever gave you this pack, not to the upstream Paradox project. Upstream can't support modifications it didn't make.
